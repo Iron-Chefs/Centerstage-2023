@@ -16,7 +16,7 @@ public class Mecanum extends LinearOpMode {
         DcMotor frontRightMotor = hardwareMap.dcMotor.get("fr");
         DcMotor backRightMotor = hardwareMap.dcMotor.get("br");
 
-        // hi test comment for jacob
+        // hi test comment for jacob!!
         // Reverse the right side motors. This may be wrong for your setup.
         // If your robot moves backwards when commanded to go forwards,
         // reverse the left side instead.
