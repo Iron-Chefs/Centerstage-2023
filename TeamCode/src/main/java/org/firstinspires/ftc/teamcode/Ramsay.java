@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -58,7 +60,7 @@ Servo grabberServo;
         grabberServo.setPosition(0);
     }
     public void openGrabber() {
-        grabberservo.setPosition(1);
+        grabberServo.setPosition(1);
     }
     
     public void lift(double power) {
