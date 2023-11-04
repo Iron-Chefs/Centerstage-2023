@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 public class Mecanum extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-    Ramsay ramsay = new Ramsay();
+    Ramsay ramsay = new Ramsay(this);
     double speed;
         waitForStart();
 
@@ -26,7 +26,7 @@ public class Mecanum extends LinearOpMode {
 
             double y = -gamepad1.left_stick_y * speed; // Remember, Y stick value is reversed
             double x = gamepad1.left_stick_x * speed;
-            double rx = gamepad1.right_stick_x * speed;
+            double rx = -gamepad1.right_stick_x * speed;
 
             ramsay.drive(y, x, rx);
         }

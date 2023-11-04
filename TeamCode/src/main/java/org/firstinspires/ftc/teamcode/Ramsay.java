@@ -5,8 +5,11 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.har
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 public class Ramsay {
+    LinearOpMode myOpMode;
+
     //drivetrain
     DcMotor frontLeftMotor;
     DcMotor backLeftMotor;
@@ -25,26 +28,31 @@ DcMotor intakeMotor;
 Servo pivotServo;
 Servo grabberServo;
 
-    public Ramsay() {
-        frontLeftMotor = hardwareMap.dcMotor.get("fl");
-        backLeftMotor = hardwareMap.dcMotor.get("bl");
-        frontRightMotor = hardwareMap.dcMotor.get("fr");
-        backRightMotor = hardwareMap.dcMotor.get("br");
+    public Ramsay(LinearOpMode opMode) {
+        myOpMode = opMode;
+
+        frontLeftMotor = myOpMode.hardwareMap.dcMotor.get("fl");
+        backLeftMotor = myOpMode.hardwareMap.dcMotor.get("bl");
+        frontRightMotor = myOpMode.hardwareMap.dcMotor.get("fr");
+        backRightMotor = myOpMode.hardwareMap.dcMotor.get("br");
 
         frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        //lift init
+        /*//lift init
         liftMotor1 = hardwareMap.dcMotor.get("lift1");
         liftMotor2 = hardwareMap.dcMotor.get("lift2");
         //intake init
         intakeMotor = hardwareMap.dcMotor.get("intakeMotor");
         //grabber init
         pivotServo = hardwareMap.servo.get("pivot");
-        grabberServo = hardwareMap.servo.get("grabber");
+        grabberServo = hardwareMap.servo.get("grabber");*/
 
     }
     public void drive(double straight, double strafe, double turn) {
+        straight = -straight;
+        strafe = -strafe;
+        //turn = turn;
             double denominator = Math.max(Math.abs(straight) + Math.abs(strafe) + Math.abs(turn), 1);
             double frontLeftPower = (straight + strafe + turn) / denominator;
             double backLeftPower = (straight - strafe + turn) / denominator;
@@ -56,7 +64,7 @@ Servo grabberServo;
             frontRightMotor.setPower(frontRightPower);
             backRightMotor.setPower(backRightPower);
     }
-    public void closeGrabber() {
+    /*public void closeGrabber() {
         grabberServo.setPosition(0);
     }
     public void openGrabber() {
@@ -66,5 +74,5 @@ Servo grabberServo;
     public void lift(double power) {
     liftMotor1.setPower(power);
     liftMotor2.setPower(power);
-    }
+    }*/
 }
