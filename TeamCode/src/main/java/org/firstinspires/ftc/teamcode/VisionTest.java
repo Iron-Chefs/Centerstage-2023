@@ -54,12 +54,10 @@ public class VisionTest extends OpMode {
         Mat redThresh = new Mat();
         Mat blueThresh = new Mat();
         Mat combinedMask = new Mat();
-        Mat result = new Mat();
-        Bitmap resultBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565);
 
         @Override
         public void init(int width, int height, CameraCalibration calibration) {
-            resultBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+            // Nothing to init
         }
 
         @Override
@@ -83,13 +81,14 @@ public class VisionTest extends OpMode {
 
         @Override
         public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
-            // Do nothing
+            // This is for drawing to RC screen so doesn't matter
         }
 
         // Return frame for DS display based on viewMode
         @Override
         public void getFrameBitmap(Continuation<? extends Consumer<Bitmap>> continuation) {
             // Create image based on viewMode
+            Mat result = new Mat();
             switch (viewMode) {
                 case Raw:
                     result = rawFrame;
@@ -113,6 +112,7 @@ public class VisionTest extends OpMode {
             }
 
             // Send result to DS
+            Bitmap resultBitmap = Bitmap.createBitmap(result.width(), result.height(), Bitmap.Config.RGB_565);
             Utils.matToBitmap(result, resultBitmap);
             continuation.dispatch(bitmapConsumer -> bitmapConsumer.accept(resultBitmap));
         }
@@ -158,6 +158,8 @@ public class VisionTest extends OpMode {
                         viewMode = ViewMode.Raw;
                         break;
                 }
+                telemetry.addData("View Mode", viewMode.name());
+                telemetry.update();
             }
             aWasPressed = true;
         } else {
