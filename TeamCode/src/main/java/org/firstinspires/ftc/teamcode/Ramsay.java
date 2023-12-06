@@ -1,54 +1,56 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 public class Ramsay {
-    LinearOpMode myOpMode;
+    LinearOpMode opMode;
 
-    //drivetrain
+    // drivetrain
     DcMotor frontLeftMotor;
     DcMotor backLeftMotor;
     DcMotor frontRightMotor;
     DcMotor backRightMotor;
 
-//lift
-DcMotor liftMotor1;
-DcMotor liftMotor2;
+    // lift
+    DcMotor liftMotor1;
+    DcMotor liftMotor2;
 
-//intake
-DcMotor intakeMotor;
+    // intake
+    DcMotor intakeMotor;
 
-//Grabber
-
-Servo pivotServo;
-Servo grabberServo;
+    // Grabber
+    Servo pivotServo;
+    Servo grabberServo;
 
     public Ramsay(LinearOpMode opMode) {
-        myOpMode = opMode;
+        this.opMode = opMode;
 
-        frontLeftMotor = myOpMode.hardwareMap.dcMotor.get("fl");
-        backLeftMotor = myOpMode.hardwareMap.dcMotor.get("bl");
-        frontRightMotor = myOpMode.hardwareMap.dcMotor.get("fr");
-        backRightMotor = myOpMode.hardwareMap.dcMotor.get("br");
+        frontLeftMotor = this.opMode.hardwareMap.dcMotor.get("fl");
+        backLeftMotor = this.opMode.hardwareMap.dcMotor.get("bl");
+        frontRightMotor = this.opMode.hardwareMap.dcMotor.get("fr");
+        backRightMotor = this.opMode.hardwareMap.dcMotor.get("br");
 
         frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        /*//lift init
-        liftMotor1 = hardwareMap.dcMotor.get("lift1");
-        liftMotor2 = hardwareMap.dcMotor.get("lift2");
-        //intake init
-        intakeMotor = hardwareMap.dcMotor.get("intakeMotor");
-        //grabber init
-        pivotServo = hardwareMap.servo.get("pivot");
-        grabberServo = hardwareMap.servo.get("grabber");*/
+        // lift init
+        //liftMotor1 = hardwareMap.dcMotor.get("lift1");
+        //liftMotor2 = hardwareMap.dcMotor.get("lift2");
+        // intake init
+        intakeMotor = this.opMode.hardwareMap.dcMotor.get("intake");
+        //intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        // grabber init
+        //pivotServo = hardwareMap.servo.get("pivot");
+        //grabberServo = hardwareMap.servo.get("grabber");*/
 
     }
+
+
+
+
     public void drive(double straight, double strafe, double turn) {
         straight = -straight;
         strafe = -strafe;
@@ -64,6 +66,11 @@ Servo grabberServo;
             frontRightMotor.setPower(frontRightPower);
             backRightMotor.setPower(backRightPower);
     }
+
+    public void setIntake(double speed) {
+        intakeMotor.setPower(speed);
+    }
+
     /*public void closeGrabber() {
         grabberServo.setPosition(0);
     }
