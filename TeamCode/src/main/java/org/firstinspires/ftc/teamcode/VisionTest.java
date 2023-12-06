@@ -19,10 +19,9 @@ public class VisionTest extends OpMode {
     @Override
     public void init() {
         // Initialize and configure detector and camera
-        Rect leftZone = centerRect(120, 280, 150, 150);
-        Rect midZone = centerRect(320, 280, 150, 150);
-        Rect rightZone = centerRect(520, 280, 150, 150);
-        detector = new ColorDetector(telemetry, TargetColor.RED, ViewMode.RAW, leftZone, midZone, rightZone);
+        Rect leftZone = centerRect(120, 300, 150, 150);
+        Rect rightZone = centerRect(450, 350, 150, 150);
+        detector = new ColorDetector(telemetry, TargetColor.RED, ViewMode.RAW, leftZone, rightZone);
         visionPortal = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class, "Webcam 1"), detector);
         CameraStreamServer.getInstance().setSource(detector);
     }

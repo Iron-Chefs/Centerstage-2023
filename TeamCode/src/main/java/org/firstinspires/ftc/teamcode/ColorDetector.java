@@ -45,7 +45,6 @@ class ColorDetector implements VisionProcessor, CameraStreamSource {
 
     // We don't expect the zones to change and they don't need to be accessible outside the detector
     private final Rect leftZone;
-    private final Rect midZone;
     private final Rect rightZone;
 
     // These enums need to be public so the robot code can use them
@@ -61,7 +60,6 @@ class ColorDetector implements VisionProcessor, CameraStreamSource {
 
     public enum Detection {
         LEFT,
-        MIDDLE,
         RIGHT,
         NONE,
     }
@@ -75,11 +73,9 @@ class ColorDetector implements VisionProcessor, CameraStreamSource {
     private final Mat thresh;
 
     private Mat leftFrame;
-    private Mat midFrame;
     private Mat rightFrame;
 
     private double leftMean;
-    private double midMean;
     private double rightMean;
     private double max;
 
@@ -92,12 +88,11 @@ class ColorDetector implements VisionProcessor, CameraStreamSource {
     private boolean confidentDetection;
 
     // Initialize all the values
-    public ColorDetector(Telemetry telemetry, TargetColor targetColor, ViewMode viewMode, Rect leftZone, Rect midZone, Rect rightZone) {
+    public ColorDetector(Telemetry telemetry, TargetColor targetColor, ViewMode viewMode, Rect leftZone, Rect rightZone) {
         this.telemetry = telemetry;
         this.viewMode = viewMode;
         this.targetColor = targetColor;
         this.leftZone = leftZone;
-        this.midZone = midZone;
         this.rightZone = rightZone;
         rawFrame = new Mat();
         frameHSV = new Mat();
@@ -105,10 +100,8 @@ class ColorDetector implements VisionProcessor, CameraStreamSource {
         red2Thresh = new Mat();
         thresh = new Mat();
         leftFrame = new Mat();
-        midFrame = new Mat();
         rightFrame = new Mat();
         leftMean = 0;
-        midMean = 0;
         rightMean = 0;
         max = 0;
         sameDetectionCount = 0;
@@ -116,23 +109,13 @@ class ColorDetector implements VisionProcessor, CameraStreamSource {
         confidentDetection = false;
     }
 
-    // Should be used in robot code to determine what has been detected
-    public Detection getConfidentDetection() {
-        // Return the detection only if we are confident
-        if (confidentDetection) {
-            return detection;
-        } else {
-            return Detection.NONE;
-        }
-    }
-
-    // Get detection regardless of confidence if that is needed for some reason
-    public Detection getUnconfidentDetection() {
+    // Get current detection
+    public Detection getDetection() {
         return detection;
     }
 
     // Get current detection confidence
-    public boolean isDetectionConfident() {
+    public boolean isConfident() {
         return confidentDetection;
     }
 
@@ -164,40 +147,33 @@ class ColorDetector implements VisionProcessor, CameraStreamSource {
 
         // Create submats for each detection zone
         leftFrame = thresh.submat(leftZone);
-        midFrame = thresh.submat(midZone);
         rightFrame = thresh.submat(rightZone);
 
         // Find average brightness of each detection zone
         leftMean = Core.mean(leftFrame).val[0];
-        midMean = Core.mean(midFrame).val[0];
         rightMean = Core.mean(rightFrame).val[0];
 
         // Find brightest detection zone and make sure it is above the minimum
-        max = Math.max(leftMean, Math.max(midMean, rightMean));
+        max = Math.max(leftMean, rightMean);
         if (max > MIN_DETECTION_THRESH) {
             // Brightest zone is detection
             if (leftMean == max) {
                 detection = Detection.LEFT;
-            } else if (midMean == max) {
-                detection = Detection.MIDDLE;
             } else if (rightMean == max) {
                 detection = Detection.RIGHT;
             }
-
-            // Detection is only confident if it has been consistent for multiple frames
-            if (detection == previousDetection) {
-                sameDetectionCount += 1;
-                if (sameDetectionCount >= MIN_DETECTION_FRAMES) {
-                    confidentDetection = true;
-                }
-            } else {
-                confidentDetection = false;
-                sameDetectionCount = 0;
-            }
-
-        // If no zone is above threshold, no detection is made
         } else {
+            // If no zone is above threshold, detection is NONE
             detection = Detection.NONE;
+        }
+
+        // Detection is only confident if it has been consistent for multiple frames
+        if (detection == previousDetection) {
+            sameDetectionCount += 1;
+            if (sameDetectionCount >= MIN_DETECTION_FRAMES) {
+                confidentDetection = true;
+            }
+        } else {
             confidentDetection = false;
             sameDetectionCount = 0;
         }
@@ -209,7 +185,6 @@ class ColorDetector implements VisionProcessor, CameraStreamSource {
         telemetry.addData("Target Color", targetColor.name());
         telemetry.addData("Detection", detection.name());
         telemetry.addData("Left", leftMean);
-        telemetry.addData("Mid", midMean);
         telemetry.addData("Right", rightMean);
         telemetry.addData("Same Frames", sameDetectionCount);
         telemetry.addData("Confident", confidentDetection);
@@ -239,7 +214,6 @@ class ColorDetector implements VisionProcessor, CameraStreamSource {
 
         // Draw red rectangles around each detection zone
         Imgproc.rectangle(result, leftZone, RED);
-        Imgproc.rectangle(result, midZone, RED);
         Imgproc.rectangle(result, rightZone, RED);
 
         // Use blue if not confident, green if confident
@@ -254,9 +228,6 @@ class ColorDetector implements VisionProcessor, CameraStreamSource {
         switch (detection) {
             case LEFT:
                 Imgproc.rectangle(result, leftZone, detectColor);
-                break;
-            case MIDDLE:
-                Imgproc.rectangle(result, midZone, detectColor);
                 break;
             case RIGHT:
                 Imgproc.rectangle(result, rightZone, detectColor);
