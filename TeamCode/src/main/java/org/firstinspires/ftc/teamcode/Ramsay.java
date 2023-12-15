@@ -40,7 +40,7 @@ public class Ramsay {
         //liftMotor1 = hardwareMap.dcMotor.get("lift1");
         //liftMotor2 = hardwareMap.dcMotor.get("lift2");
         // intake init
-        intakeMotor = this.opMode.hardwareMap.dcMotor.get("intake");
+        intakeMotor = this.opMode.hardwareMap.dcMotor.get("intakeMotor");
         //intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         // grabber init
         //pivotServo = hardwareMap.servo.get("pivot");

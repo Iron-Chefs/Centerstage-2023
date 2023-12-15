@@ -28,14 +28,13 @@ public class Mecanum extends LinearOpMode {
             double x = gamepad1.left_stick_x * speed;
             double rx = -gamepad1.right_stick_x * speed;
 
-            double intakeInput = gamepad1.right_trigger;
-            double intakeSpeed;
-            if (gamepad1.right_bumper) {
-                // Reverse if bumper is pressed
-                intakeSpeed = -0.2 - (intakeInput * 0.8);
-            } else {
-                intakeSpeed = intakeInput;
-            }
+            // lt in, rt out
+            // Gives a number between 0 and 1
+            double lt = gamepad2.left_trigger;
+            double rt = -1*gamepad2.right_trigger;
+            double intakeSpeed = lt+rt;
+
+            // Wants a number between -1 and 1
             ramsay.setIntake(intakeSpeed);
 
             ramsay.drive(y, x, rx);
