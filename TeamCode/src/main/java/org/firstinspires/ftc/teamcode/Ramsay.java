@@ -37,14 +37,16 @@ public class Ramsay {
         backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // lift init
-        //liftMotor1 = hardwareMap.dcMotor.get("lift1");
-        //liftMotor2 = hardwareMap.dcMotor.get("lift2");
+        liftMotor1 = this.opMode.hardwareMap.dcMotor.get("lift1");
+        liftMotor2 = this.opMode.hardwareMap.dcMotor.get("lift2");
+        liftMotor2.setDirection(DcMotorSimple.Direction.REVERSE);
+
         // intake init
         intakeMotor = this.opMode.hardwareMap.dcMotor.get("intakeMotor");
         //intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         // grabber init
-        //pivotServo = hardwareMap.servo.get("pivot");
-        //grabberServo = hardwareMap.servo.get("grabber");*/
+        pivotServo = this.opMode.hardwareMap.servo.get("pivot");
+        grabberServo = this.opMode.hardwareMap.servo.get("grabber");
 
     }
 
@@ -71,15 +73,23 @@ public class Ramsay {
         intakeMotor.setPower(speed);
     }
 
-    /*public void closeGrabber() {
+    public void closeGrabber() {
         grabberServo.setPosition(0);
     }
     public void openGrabber() {
         grabberServo.setPosition(1);
     }
+
+    public void closePivot() {
+        pivotServo.setPosition(0);
+    }
+
+    public void openPivot() {
+        pivotServo.setPosition(1);
+    }
     
     public void lift(double power) {
-    liftMotor1.setPower(power);
-    liftMotor2.setPower(power);
-    }*/
+        liftMotor1.setPower(power);
+        liftMotor2.setPower(power);
+    }
 }

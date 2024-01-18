@@ -18,26 +18,61 @@ public class Mecanum extends LinearOpMode {
 
         while (opModeIsActive()) {
 
+            // Turbo button controls
             if (gamepad1.right_bumper) {
                 speed = 1;
             } else {
                 speed = .5;
             }
 
+            // Drive Controls
             double y = -gamepad1.left_stick_y * speed; // Remember, Y stick value is reversed
             double x = gamepad1.left_stick_x * speed;
             double rx = -gamepad1.right_stick_x * speed;
 
-            // lt in, rt out
-            // Gives a number between 0 and 1
+            ramsay.drive(y, x, rx);
+
+            // Intake Controls
             double lt = gamepad2.left_trigger;
             double rt = -1*gamepad2.right_trigger;
             double intakeSpeed = lt+rt;
 
-            // Wants a number between -1 and 1
             ramsay.setIntake(intakeSpeed);
 
-            ramsay.drive(y, x, rx);
+            double liftCommand = -gamepad2.left_stick_y;
+            ramsay.lift(liftCommand);
+
+            // Pivot Controls
+            if (gamepad2.a) {
+                ramsay.openPivot();
+            }
+            if (gamepad2.b) {
+                ramsay.closePivot();
+            }
+
+            // Grabber Controls
+            if (gamepad2.x) {
+                ramsay.openGrabber();
+            }
+            if (gamepad2.y) {
+                ramsay.closeGrabber();
+            }
         }
     }
 }
+
+
+/*
+Gamepad 1 Controls
+- Right Bumper = Turbo Button
+- Gamepad 1 Joysticks = Drive train controls
+
+Gamepad 2 Controls
+- Left Trigger = Out Intake
+- Right Trigger = In Intake
+- Left Joystick = Lift Controls
+- A = Open Pivot Servo
+- B = Close Pivot Servo
+- X = Open Grabber Servo
+- Y = Close Grabber Servo
+ */
